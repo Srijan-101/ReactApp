@@ -1,25 +1,61 @@
-import logo from './logo.svg';
-import './App.css';
+import Form from './Components/Form'
+import Table from './Components/Table';
+import {useState} from 'react'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+
+const Students = [
+    {id:12,rollno:181743,name:"Srijan",faculty:"Software Engineering",address:"Manbhawan"},
+]
+
+
+const App = () => {
+    const [students,setStudents] = useState(Students);
+    const [editStudent,setEditStudent] = useState();
+
+
+    const getData = (data) => {
+
+        let objIndex = students.findIndex((obj) => obj.id === data.id)
+
+        if(editStudent) {
+            setStudents((prevState) => {
+                prevState[objIndex] = data;
+                return [...prevState]
+            })
+        }
+        else{
+            setStudents((prevState) => {
+                return [data,...prevState];
+            })
+        }
+    }
+
+    const getID = (data) => {
+         const filterArray = students.filter(student => {
+             if(student.id != data) {
+                 return student;
+             }
+         }) 
+         setStudents(filterArray);
+    }
+
+    const getIdEdit = (data) => {
+         const EditArray = students.filter(student => {
+             if(student.id == data){
+                 return student;
+             }
+         })
+         setEditStudent(EditArray);
+    }
+
+    return (
+     <>  
+         <Form getStudentInfo={getData} editStudent={editStudent}/>
+         <Table studentsData={students} getRollno={getID} getrollnoEdit={getIdEdit}/>
+      </>
+    )
 }
+
 
 export default App;
